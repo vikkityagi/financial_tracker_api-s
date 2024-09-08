@@ -55,4 +55,15 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody User user) {
+        boolean isValidUser = userService.validateUser(user.getUsername(), user.getPassword());
+        if (isValidUser) {
+
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
