@@ -57,10 +57,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
-        boolean isValidUser = userService.validateUser(user.getUsername(), user.getPassword());
-        if (isValidUser) {
-
-            return new ResponseEntity<>(user,HttpStatus.OK);
+        User validUser = userService.validateUser(user.getUsername(), user.getPassword());
+        if (validUser != null) {
+            return new ResponseEntity<>(validUser,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -39,12 +39,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean validateUser(String username, String password) {
+    public User validateUser(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
+        User user = null;
         if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            return user.getConfirmPassword().equals(password); // In real applications, use encrypted passwords
+            user = userOpt.get();
+            if(user.getConfirmPassword().equals(password))
+                return user; // In real applications, use encrypted passwords
+            return null;
         }
-        return false;
+        return user;
     }
 }
