@@ -18,6 +18,8 @@ public class Category {
 
     private String description;
 
+    private long loginId;
+
     public Long getId() {
         return id;
     }
@@ -40,6 +42,14 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(long loginId) {
+        this.loginId = loginId;
     }
 
     

@@ -11,33 +11,56 @@ import com.example.CategoryService.service.CategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/v1")
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/")
-    public void getAllCategories() {
-        System.out.println("category done");
+    
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-    //     return ResponseEntity.ok(categoryService.getCategoryById(id));
-    // }
+    @GetMapping("/categories/{login_id}")
+    public ResponseEntity<List<Category>> list(@PathVariable Long login_id) {
+        List<Category> categoryList = categoryService.getAllCategories(login_id);
+        if(categoryList == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else{
+            return new ResponseEntity<>(categoryList,HttpStatus.OK);
+        }
+    }
 
-    @PostMapping
+    @PostMapping("/categories")
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.CREATED);
+
+        try{
+            Category categoryRet = categoryService.createCategory(category);
+            if(categoryRet.getId() != null){
+                return new ResponseEntity<>(categoryRet, HttpStatus.CREATED);
+            }else{
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.updateCategory(id, category));
+    @PutMapping("/category")
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+        Category categoryRet = this.categoryService.updateCategory(category);
+        if(categoryRet.getId() != null){
+            return new ResponseEntity<>(categoryRet, HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/category/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();

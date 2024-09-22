@@ -17,8 +17,13 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<Category> getAllCategories(long login_id) {
+        List<Category> categories = categoryRepository.findAllById(login_id);
+        if(categories.size() > 0){
+            return categories;
+        }else{
+            return categories = null;
+        }
     }
 
     @Override
@@ -33,8 +38,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
-        Category existingCategory = getCategoryById(id);
+    public Category updateCategory(Category category) {
+        Category existingCategory = getCategoryById(category.getId());
         existingCategory.setName(category.getName());
         existingCategory.setDescription(category.getDescription());
         return categoryRepository.save(existingCategory);
