@@ -15,9 +15,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public List<Transaction> getTransactionsByUser(Long userId) {
-        return transactionRepository.findByUserId(userId);
-    }
+    
 
     public Transaction saveTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);

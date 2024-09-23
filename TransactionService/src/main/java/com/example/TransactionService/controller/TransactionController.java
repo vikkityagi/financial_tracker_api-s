@@ -1,6 +1,9 @@
 package com.example.TransactionService.controller;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,16 +13,16 @@ import com.example.TransactionService.service.TransactionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/transaction")
+@RequestMapping("/api/v1")
 public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
 
-    @GetMapping("/")
-    public void get(){
-        System.out.println("transaction done");
-    }
+    // @GetMapping("/")
+    // public void get(){
+    //     System.out.println("transaction done");
+    // }
 
     // // Get transactions by user ID
     // @GetMapping("/user/{userId}")
@@ -28,12 +31,17 @@ public class TransactionController {
     //     return ResponseEntity.ok(transactions);
     // }
 
-    // // Add a new transaction
-    // @PostMapping
-    // public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
-    //     Transaction savedTransaction = transactionService.saveTransaction(transaction);
-    //     return ResponseEntity.ok(savedTransaction);
-    // }
+    // Add a new transaction
+    @PostMapping("/transactions")
+    public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
+        Transaction savedTransaction = transactionService.saveTransaction(transaction);
+        if(savedTransaction != null && savedTransaction.getId() != null){
+            return new ResponseEntity<>(savedTransaction,HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+        
+    }
 
     // // Delete a transaction by ID
     // @DeleteMapping("/{id}")
