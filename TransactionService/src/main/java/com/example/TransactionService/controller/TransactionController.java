@@ -13,7 +13,7 @@ import com.example.TransactionService.service.TransactionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class TransactionController {
 
     @Autowired
@@ -24,14 +24,19 @@ public class TransactionController {
     //     System.out.println("transaction done");
     // }
 
-    // // Get transactions by user ID
-    // @GetMapping("/user/{userId}")
-    // public ResponseEntity<List<Transaction>> getTransactionsByUser(@PathVariable Long userId) {
-    //     List<Transaction> transactions = transactionService.getTransactionsByUser(userId);
-    //     return ResponseEntity.ok(transactions);
-    // }
+    // Get transactions by user ID
+    @GetMapping("/transactions/{login_id}")
+    public ResponseEntity<List<Transaction>> list(@PathVariable long login_id) {
+        List<Transaction> transactions = transactionService.getTransactionByLoginId(login_id);
+        if(transactions.size() > 0){
+            return ResponseEntity.ok(transactions);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+    }
 
-    // Add a new transaction
+    
     @PostMapping("/transactions")
     public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
         Transaction savedTransaction = transactionService.saveTransaction(transaction);
@@ -43,10 +48,21 @@ public class TransactionController {
         
     }
 
-    // // Delete a transaction by ID
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
-    //     transactionService.deleteTransaction(id);
-    //     return ResponseEntity.noContent().build();
-    // }
+    @PutMapping("/transactions")
+    public ResponseEntity<Transaction> updateTransaction(@RequestBody Transaction transaction) {
+        Transaction savedTransaction = transactionService.updateTransaction(transaction);
+        if(savedTransaction != null && savedTransaction.getId() != null){
+            return new ResponseEntity<>(savedTransaction,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        }
+        
+    }
+
+    // Delete a transaction by ID
+    @DeleteMapping("/transactions/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
+        transactionService.deleteTransaction(id);
+        return ResponseEntity.noContent().build();
+    }
 }
