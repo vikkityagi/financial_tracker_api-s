@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.TransactionService.entity.Transaction;
 import com.example.TransactionService.repository.TransactionRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,7 @@ public class TransactionService {
     
 
     public Transaction saveTransaction(Transaction transaction) {
+        transaction.setCreated_at(LocalDateTime.now());
         return transactionRepository.save(transaction);
     }
 
@@ -38,6 +40,8 @@ public class TransactionService {
         transactionObj.setAmount(transaction.getAmount());
         transactionObj.setDate(transaction.getDate());
         transactionObj.setCategory_id(transaction.getCategory_id());
+        transactionObj.setType(transaction.getType());
+        transactionObj.setUpdated_at(LocalDateTime.now());
         return this.transactionRepository.save(transactionObj);
     }
 }

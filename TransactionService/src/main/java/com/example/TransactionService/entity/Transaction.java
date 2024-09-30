@@ -2,6 +2,7 @@ package com.example.TransactionService.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,10 @@ public class Transaction  {
     private long login_id; // Assuming userId is handled as a reference for now
 
     private long category_id;
+
+    private LocalDateTime created_at;
+
+    private LocalDateTime updated_at;
 
     public Transaction(){
 
@@ -100,6 +105,30 @@ public class Transaction  {
 
     public void setCategory_id(long category_id) {
         this.category_id = category_id;
+    }
+
+
+
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+
+
+    public LocalDateTime getUpdated_at() {
+        return updated_at;
+    }
+
+
+
+    public void setUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
     }
 
     
